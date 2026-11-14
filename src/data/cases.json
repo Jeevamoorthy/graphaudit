@@ -1,0 +1,540 @@
+{
+  "tutorialCase": {
+    "id": "case-tutorial",
+    "title": "Tutorial Practice Case",
+    "description": "Familiarize yourself with reviewing transaction graphs. Click on nodes to inspect details, and toggle accounts you suspect of being in a fraud ring.",
+    "isTutorial": true,
+    "groundTruth": {
+      "isFraudRing": true,
+      "ringAccounts": ["A1", "A2", "A3", "A4"],
+      "explanation": "Accounts A1, A2, and A3 rapidly transfer funds into A4 (funnel hub), which passes all funds out to an external exchange within 45 minutes."
+    },
+    "modelVerdict": {
+      "flag": "Suspicious Ring Detected",
+      "riskScore": 91,
+      "riskLevel": "high",
+      "isCorrect": true,
+      "explanation": "Funnel hub pattern: 3 accounts deposit identical amounts ($4,900) into A4 within 45 minutes, immediately drained.",
+      "highlightedNodes": ["A1", "A2", "A3", "A4"],
+      "highlightedEdges": ["e1", "e2", "e3"],
+      "uncertainty": "High confidence (91%)"
+    },
+    "graph": {
+      "nodes": [
+        { "id": "A1", "label": "Account A1", "type": "mule", "balance": "$120", "age": "14 days", "transactions": 4 },
+        { "id": "A2", "label": "Account A2", "type": "mule", "balance": "$85", "age": "18 days", "transactions": 3 },
+        { "id": "A3", "label": "Account A3", "type": "mule", "balance": "$210", "age": "9 days", "transactions": 5 },
+        { "id": "A4", "label": "Account A4 (Hub)", "type": "hub", "balance": "$14,700", "age": "32 days", "transactions": 12 },
+        { "id": "B1", "label": "Account B1", "type": "normal", "balance": "$2,400", "age": "410 days", "transactions": 38 },
+        { "id": "B2", "label": "Account B2", "type": "normal", "balance": "$1,150", "age": "620 days", "transactions": 54 },
+        { "id": "B3", "label": "Account B3", "type": "normal", "balance": "$890", "age": "180 days", "transactions": 19 },
+        { "id": "B4", "label": "Account B4", "type": "normal", "balance": "$3,200", "age": "730 days", "transactions": 92 }
+      ],
+      "edges": [
+        { "id": "e1", "source": "A1", "target": "A4", "amount": "$4,900", "time": "10:14 AM", "isRingEdge": true },
+        { "id": "e2", "source": "A2", "target": "A4", "amount": "$4,900", "time": "10:28 AM", "isRingEdge": true },
+        { "id": "e3", "source": "A3", "target": "A4", "amount": "$4,900", "time": "10:45 AM", "isRingEdge": true },
+        { "id": "e4", "source": "B1", "target": "B2", "amount": "$150", "time": "Yesterday", "isRingEdge": false },
+        { "id": "e5", "source": "B2", "target": "B3", "amount": "$45", "time": "2 days ago", "isRingEdge": false },
+        { "id": "e6", "source": "B4", "target": "B1", "amount": "$600", "time": "3 days ago", "isRingEdge": false }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "case-01",
+      "caseNumber": 1,
+      "title": "Case 1: Capital Dispersal Cluster",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": true,
+        "ringAccounts": ["U101", "U102", "U103", "U104"],
+        "summary": "Classic circular layering ring: money cycles through U101 -> U102 -> U103 -> U104 with 95% volume retention."
+      },
+      "modelVerdict": {
+        "flag": "Suspicious Ring Detected",
+        "riskScore": 94,
+        "riskLevel": "high",
+        "explanation": "High graph cycle density: $35,000 circulates in a closed loop through 4 new accounts within 3 hours.",
+        "highlightedNodes": ["U101", "U102", "U103", "U104"],
+        "highlightedEdges": ["c1_e1", "c1_e2", "c1_e3", "c1_e4"],
+        "uncertainty": "High confidence (94%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "U101", "label": "Acc-101", "balance": "$450", "age": "12d", "txCount": 6 },
+          { "id": "U102", "label": "Acc-102", "balance": "$320", "age": "15d", "txCount": 5 },
+          { "id": "U103", "label": "Acc-103", "balance": "$210", "age": "11d", "txCount": 7 },
+          { "id": "U104", "label": "Acc-104", "balance": "$180", "age": "14d", "txCount": 5 },
+          { "id": "U105", "label": "Acc-105", "balance": "$4,200", "age": "320d", "txCount": 42 },
+          { "id": "U106", "label": "Acc-106", "balance": "$1,850", "age": "240d", "txCount": 18 },
+          { "id": "U107", "label": "Acc-107", "balance": "$2,900", "age": "510d", "txCount": 65 },
+          { "id": "U108", "label": "Acc-108", "balance": "$850", "age": "190d", "txCount": 14 },
+          { "id": "U109", "label": "Acc-109", "balance": "$3,100", "age": "410d", "txCount": 31 },
+          { "id": "U110", "label": "Acc-110", "balance": "$1,450", "age": "180d", "txCount": 22 },
+          { "id": "U111", "label": "Acc-111", "balance": "$2,200", "age": "290d", "txCount": 27 },
+          { "id": "U112", "label": "Acc-112", "balance": "$980", "age": "160d", "txCount": 13 },
+          { "id": "U113", "label": "Acc-113", "balance": "$3,400", "age": "600d", "txCount": 54 },
+          { "id": "U114", "label": "Acc-114", "balance": "$1,120", "age": "210d", "txCount": 16 },
+          { "id": "U115", "label": "Acc-115", "balance": "$2,750", "age": "380d", "txCount": 39 }
+        ],
+        "edges": [
+          { "id": "c1_e1", "source": "U101", "target": "U102", "amount": "$9,200", "time": "11:02 AM" },
+          { "id": "c1_e2", "source": "U102", "target": "U103", "amount": "$8,950", "time": "11:45 AM" },
+          { "id": "c1_e3", "source": "U103", "target": "U104", "amount": "$8,700", "time": "12:30 PM" },
+          { "id": "c1_e4", "source": "U104", "target": "U101", "amount": "$8,500", "time": "01:15 PM" },
+          { "id": "c1_e5", "source": "U105", "target": "U106", "amount": "$240", "time": "Yesterday" },
+          { "id": "c1_e6", "source": "U106", "target": "U107", "amount": "$115", "time": "2d ago" },
+          { "id": "c1_e7", "source": "U107", "target": "U108", "amount": "$350", "time": "3d ago" },
+          { "id": "c1_e8", "source": "U109", "target": "U110", "amount": "$780", "time": "Yesterday" },
+          { "id": "c1_e9", "source": "U111", "target": "U112", "amount": "$125", "time": "4d ago" },
+          { "id": "c1_e10", "source": "U113", "target": "U114", "amount": "$450", "time": "Yesterday" },
+          { "id": "c1_e11", "source": "U114", "target": "U115", "amount": "$310", "time": "5d ago" }
+        ]
+      }
+    },
+    {
+      "id": "case-02",
+      "caseNumber": 2,
+      "title": "Case 2: Corporate Payroll Disbursement",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": false,
+        "ringAccounts": [],
+        "summary": "Legitimate enterprise payroll: verified organization node disburses monthly salaries to long-standing employee accounts."
+      },
+      "modelVerdict": {
+        "flag": "Looks Normal",
+        "riskScore": 12,
+        "riskLevel": "low",
+        "explanation": "Standard 1-to-many payroll pattern from 4-year-old verified enterprise account to established employees.",
+        "highlightedNodes": ["P201", "P202", "P203", "P204"],
+        "highlightedEdges": ["c2_e1", "c2_e2", "c2_e3"],
+        "uncertainty": "High confidence (96%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "P201", "label": "Corp-PayHub", "balance": "$185,000", "age": "1420d", "txCount": 890 },
+          { "id": "P202", "label": "Emp-202", "balance": "$3,800", "age": "520d", "txCount": 112 },
+          { "id": "P203", "label": "Emp-203", "balance": "$4,100", "age": "640d", "txCount": 98 },
+          { "id": "P204", "label": "Emp-204", "balance": "$3,950", "age": "480d", "txCount": 84 },
+          { "id": "P205", "label": "Emp-205", "balance": "$4,500", "age": "810d", "txCount": 142 },
+          { "id": "P206", "label": "Emp-206", "balance": "$3,200", "age": "390d", "txCount": 76 },
+          { "id": "P207", "label": "Vendor-7", "balance": "$12,400", "age": "920d", "txCount": 210 },
+          { "id": "P208", "label": "User-208", "balance": "$1,400", "age": "210d", "txCount": 29 },
+          { "id": "P209", "label": "User-209", "balance": "$890", "age": "150d", "txCount": 18 },
+          { "id": "P210", "label": "User-210", "balance": "$2,100", "age": "340d", "txCount": 44 },
+          { "id": "P211", "label": "User-211", "balance": "$1,750", "age": "280d", "txCount": 33 },
+          { "id": "P212", "label": "User-212", "balance": "$950", "age": "190d", "txCount": 15 },
+          { "id": "P213", "label": "User-213", "balance": "$3,100", "age": "460d", "txCount": 51 },
+          { "id": "P214", "label": "User-214", "balance": "$1,620", "age": "220d", "txCount": 26 }
+        ],
+        "edges": [
+          { "id": "c2_e1", "source": "P201", "target": "P202", "amount": "$4,200", "time": "1st of Month" },
+          { "id": "c2_e2", "source": "P201", "target": "P203", "amount": "$4,500", "time": "1st of Month" },
+          { "id": "c2_e3", "source": "P201", "target": "P204", "amount": "$4,100", "time": "1st of Month" },
+          { "id": "c2_e4", "source": "P201", "target": "P205", "amount": "$4,800", "time": "1st of Month" },
+          { "id": "c2_e5", "source": "P201", "target": "P206", "amount": "$3,900", "time": "1st of Month" },
+          { "id": "c2_e6", "source": "P202", "target": "P207", "amount": "$120", "time": "2d ago" },
+          { "id": "c2_e7", "source": "P208", "target": "P209", "amount": "$85", "time": "Yesterday" },
+          { "id": "c2_e8", "source": "P210", "target": "P211", "amount": "$210", "time": "3d ago" },
+          { "id": "c2_e9", "source": "P212", "target": "P213", "amount": "$340", "time": "Yesterday" },
+          { "id": "c2_e10", "source": "P213", "target": "P214", "amount": "$95", "time": "4d ago" }
+        ]
+      }
+    },
+    {
+      "id": "case-03",
+      "caseNumber": 3,
+      "title": "Case 3: Aggregated Mule Funnel",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": true,
+        "ringAccounts": ["M301", "M302", "M303", "M304", "M305"],
+        "summary": "Classic fan-in funnel: 4 recruited student accounts receive smurfed funds and immediately sweep 98% into collector M305."
+      },
+      "modelVerdict": {
+        "flag": "Suspicious Ring Detected",
+        "riskScore": 91,
+        "riskLevel": "high",
+        "explanation": "High fan-in convergence: 4 newly activated accounts drain 98% of deposits into collector M305 within 90 minutes.",
+        "highlightedNodes": ["M301", "M302", "M303", "M304", "M305"],
+        "highlightedEdges": ["c3_e1", "c3_e2", "c3_e3", "c3_e4"],
+        "uncertainty": "High confidence (91%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "M301", "label": "Mule-301", "balance": "$95", "age": "18d", "txCount": 4 },
+          { "id": "M302", "label": "Mule-302", "balance": "$110", "age": "22d", "txCount": 3 },
+          { "id": "M303", "label": "Mule-303", "balance": "$80", "age": "14d", "txCount": 4 },
+          { "id": "M304", "label": "Mule-304", "balance": "$125", "age": "25d", "txCount": 5 },
+          { "id": "M305", "label": "Collector-Hub", "balance": "$19,400", "age": "39d", "txCount": 16 },
+          { "id": "M306", "label": "Retail-306", "balance": "$3,200", "age": "450d", "txCount": 65 },
+          { "id": "M307", "label": "User-307", "balance": "$1,450", "age": "310d", "txCount": 24 },
+          { "id": "M308", "label": "User-308", "balance": "$2,200", "age": "520d", "txCount": 48 },
+          { "id": "M309", "label": "User-309", "balance": "$980", "age": "190d", "txCount": 17 },
+          { "id": "M310", "label": "User-310", "balance": "$4,100", "age": "680d", "txCount": 92 },
+          { "id": "M311", "label": "User-311", "balance": "$850", "age": "140d", "txCount": 11 },
+          { "id": "M312", "label": "User-312", "balance": "$1,900", "age": "290d", "txCount": 31 },
+          { "id": "M313", "label": "User-313", "balance": "$2,800", "age": "410d", "txCount": 54 },
+          { "id": "M314", "label": "User-314", "balance": "$1,300", "age": "220d", "txCount": 19 },
+          { "id": "M315", "label": "User-315", "balance": "$3,500", "age": "580d", "txCount": 73 },
+          { "id": "M316", "label": "User-316", "balance": "$720", "age": "110d", "txCount": 9 }
+        ],
+        "edges": [
+          { "id": "c3_e1", "source": "M301", "target": "M305", "amount": "$4,850", "time": "02:15 PM" },
+          { "id": "c3_e2", "source": "M302", "target": "M305", "amount": "$4,920", "time": "02:32 PM" },
+          { "id": "c3_e3", "source": "M303", "target": "M305", "amount": "$4,780", "time": "02:49 PM" },
+          { "id": "c3_e4", "source": "M304", "target": "M305", "amount": "$4,850", "time": "03:08 PM" },
+          { "id": "c3_e5", "source": "M306", "target": "M307", "amount": "$140", "time": "Yesterday" },
+          { "id": "c3_e6", "source": "M307", "target": "M308", "amount": "$220", "time": "2d ago" },
+          { "id": "c3_e7", "source": "M309", "target": "M310", "amount": "$85", "time": "Yesterday" },
+          { "id": "c3_e8", "source": "M311", "target": "M312", "amount": "$450", "time": "3d ago" },
+          { "id": "c3_e9", "source": "M313", "target": "M314", "amount": "$310", "time": "Yesterday" },
+          { "id": "c3_e10", "source": "M315", "target": "M316", "amount": "$95", "time": "4d ago" }
+        ]
+      }
+    },
+    {
+      "id": "case-04",
+      "caseNumber": 4,
+      "title": "Case 4: Campus Festival Event Pool",
+      "modelCorrect": false,
+      "isDeliberateError": "false_positive",
+      "groundTruth": {
+        "isFraudRing": false,
+        "ringAccounts": [],
+        "summary": "LEGITIMATE DENSE GROUP (Model False Positive): College department students pooling ticket money and shared vendor costs for an annual cultural symposium. Completely innocent group transactions."
+      },
+      "modelVerdict": {
+        "flag": "Suspicious Ring Detected",
+        "riskScore": 88,
+        "riskLevel": "high",
+        "explanation": "High triangular clique density: 5 interconnected accounts transacting in rapid bursts resembling circular layering.",
+        "highlightedNodes": ["C401", "C402", "C403", "C404", "C405"],
+        "highlightedEdges": ["c4_e1", "c4_e2", "c4_e3", "c4_e4", "c4_e5"],
+        "uncertainty": "High confidence (88%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "C401", "label": "Student-Pres", "balance": "$620", "age": "480d", "txCount": 180 },
+          { "id": "C402", "label": "Student-Treas", "balance": "$850", "age": "520d", "txCount": 210 },
+          { "id": "C403", "label": "Student-Lead", "balance": "$430", "age": "390d", "txCount": 140 },
+          { "id": "C404", "label": "Student-Coord", "balance": "$310", "age": "440d", "txCount": 160 },
+          { "id": "C405", "label": "Sound-Vendor", "balance": "$3,400", "age": "890d", "txCount": 420 },
+          { "id": "C406", "label": "Attendee-6", "balance": "$240", "age": "210d", "txCount": 45 },
+          { "id": "C407", "label": "Attendee-7", "balance": "$190", "age": "310d", "txCount": 52 },
+          { "id": "C408", "label": "Attendee-8", "balance": "$380", "age": "290d", "txCount": 38 },
+          { "id": "C409", "label": "Attendee-9", "balance": "$510", "age": "410d", "txCount": 67 },
+          { "id": "C410", "label": "Attendee-10", "balance": "$140", "age": "180d", "txCount": 29 },
+          { "id": "C411", "label": "Campus-Cafe", "balance": "$7,800", "age": "1100d", "txCount": 980 },
+          { "id": "C412", "label": "Student-12", "balance": "$320", "age": "240d", "txCount": 33 },
+          { "id": "C413", "label": "Student-13", "balance": "$280", "age": "360d", "txCount": 41 },
+          { "id": "C414", "label": "Student-14", "balance": "$490", "age": "500d", "txCount": 58 }
+        ],
+        "edges": [
+          { "id": "c4_e1", "source": "C401", "target": "C402", "amount": "$450", "time": "Yesterday" },
+          { "id": "c4_e2", "source": "C402", "target": "C403", "amount": "$350", "time": "Yesterday" },
+          { "id": "c4_e3", "source": "C403", "target": "C404", "amount": "$300", "time": "Yesterday" },
+          { "id": "c4_e4", "source": "C404", "target": "C401", "amount": "$280", "time": "Yesterday" },
+          { "id": "c4_e5", "source": "C402", "target": "C405", "amount": "$1,200", "time": "Yesterday" },
+          { "id": "c4_e6", "source": "C406", "target": "C402", "amount": "$30", "time": "2d ago" },
+          { "id": "c4_e7", "source": "C407", "target": "C402", "amount": "$30", "time": "2d ago" },
+          { "id": "c4_e8", "source": "C408", "target": "C402", "amount": "$30", "time": "2d ago" },
+          { "id": "c4_e9", "source": "C401", "target": "C411", "amount": "$65", "time": "3d ago" },
+          { "id": "c4_e10", "source": "C412", "target": "C413", "amount": "$45", "time": "Yesterday" },
+          { "id": "c4_e11", "source": "C413", "target": "C414", "amount": "$90", "time": "4d ago" }
+        ]
+      }
+    },
+    {
+      "id": "case-05",
+      "caseNumber": 5,
+      "title": "Case 5: Shared Family Expense Ring",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": false,
+        "ringAccounts": [],
+        "summary": "Legitimate household: Parents and adult siblings sending maintenance money and reimbursing groceries."
+      },
+      "modelVerdict": {
+        "flag": "Looks Normal",
+        "riskScore": 16,
+        "riskLevel": "low",
+        "explanation": "Recurring low-velocity transfers between long-standing verified personal accounts with steady balances.",
+        "highlightedNodes": ["F501", "F502", "F503"],
+        "highlightedEdges": ["c5_e1", "c5_e2"],
+        "uncertainty": "High confidence (93%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "F501", "label": "Parent-1", "balance": "$14,500", "age": "1890d", "txCount": 540 },
+          { "id": "F502", "label": "Parent-2", "balance": "$8,200", "age": "1640d", "txCount": 420 },
+          { "id": "F503", "label": "Child-1", "balance": "$1,200", "age": "610d", "txCount": 110 },
+          { "id": "F504", "label": "Child-2", "balance": "$950", "age": "480d", "txCount": 85 },
+          { "id": "F505", "label": "Grocery-Hub", "balance": "$32,000", "age": "1200d", "txCount": 890 },
+          { "id": "F506", "label": "User-506", "balance": "$3,100", "age": "390d", "txCount": 48 },
+          { "id": "F507", "label": "User-507", "balance": "$2,400", "age": "510d", "txCount": 62 },
+          { "id": "F508", "label": "User-508", "balance": "$1,600", "age": "240d", "txCount": 31 },
+          { "id": "F509", "label": "User-509", "balance": "$4,200", "age": "680d", "txCount": 77 },
+          { "id": "F510", "label": "User-510", "balance": "$880", "age": "180d", "txCount": 21 },
+          { "id": "F511", "label": "User-511", "balance": "$2,100", "age": "430d", "txCount": 39 },
+          { "id": "F512", "label": "User-512", "balance": "$1,350", "age": "290d", "txCount": 26 }
+        ],
+        "edges": [
+          { "id": "c5_e1", "source": "F501", "target": "F503", "amount": "$800", "time": "Monthly" },
+          { "id": "c5_e2", "source": "F501", "target": "F504", "amount": "$750", "time": "Monthly" },
+          { "id": "c5_e3", "source": "F502", "target": "F501", "amount": "$1,200", "time": "Monthly" },
+          { "id": "c5_e4", "source": "F503", "target": "F505", "amount": "$65", "time": "Yesterday" },
+          { "id": "c5_e5", "source": "F504", "target": "F505", "amount": "$45", "time": "2d ago" },
+          { "id": "c5_e6", "source": "F506", "target": "F507", "amount": "$190", "time": "Yesterday" },
+          { "id": "c5_e7", "source": "F508", "target": "F509", "amount": "$340", "time": "3d ago" },
+          { "id": "c5_e8", "source": "F510", "target": "F511", "amount": "$110", "time": "Yesterday" },
+          { "id": "c5_e9", "source": "F511", "target": "F512", "amount": "$85", "time": "4d ago" }
+        ]
+      }
+    },
+    {
+      "id": "case-06",
+      "caseNumber": 6,
+      "title": "Case 6: High-Velocity Passthrough Chain",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": true,
+        "ringAccounts": ["L601", "L602", "L603", "L604"],
+        "summary": "Rapid daisy-chain mule transfer: $28,000 hops through 4 dormant accounts within 110 minutes before exiting to an off-ramp."
+      },
+      "modelVerdict": {
+        "flag": "Suspicious Ring Detected",
+        "riskScore": 95,
+        "riskLevel": "high",
+        "explanation": "Zero holding time: funds hop through 4 dormant accounts with <15 min dwell time each.",
+        "highlightedNodes": ["L601", "L602", "L603", "L604"],
+        "highlightedEdges": ["c6_e1", "c6_e2", "c6_e3"],
+        "uncertainty": "High confidence (95%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "L601", "label": "Dormant-601", "balance": "$40", "age": "410d", "txCount": 3 },
+          { "id": "L602", "label": "Dormant-602", "balance": "$60", "age": "380d", "txCount": 4 },
+          { "id": "L603", "label": "Dormant-603", "balance": "$25", "age": "460d", "txCount": 3 },
+          { "id": "L604", "label": "Exit-Mule", "balance": "$27,800", "age": "21d", "txCount": 5 },
+          { "id": "L605", "label": "User-605", "balance": "$3,200", "age": "320d", "txCount": 44 },
+          { "id": "L606", "label": "User-606", "balance": "$1,750", "age": "410d", "txCount": 38 },
+          { "id": "L607", "label": "User-607", "balance": "$2,900", "age": "530d", "txCount": 61 },
+          { "id": "L608", "label": "User-608", "balance": "$890", "age": "190d", "txCount": 18 },
+          { "id": "L609", "label": "User-609", "balance": "$4,100", "age": "670d", "txCount": 82 },
+          { "id": "L610", "label": "User-610", "balance": "$1,450", "age": "280d", "txCount": 27 },
+          { "id": "L611", "label": "User-611", "balance": "$2,100", "age": "340d", "txCount": 35 },
+          { "id": "L612", "label": "User-612", "balance": "$980", "age": "160d", "txCount": 14 },
+          { "id": "L613", "label": "User-613", "balance": "$3,400", "age": "490d", "txCount": 56 },
+          { "id": "L614", "label": "User-614", "balance": "$1,120", "age": "210d", "txCount": 19 }
+        ],
+        "edges": [
+          { "id": "c6_e1", "source": "L601", "target": "L602", "amount": "$28,500", "time": "09:12 AM" },
+          { "id": "c6_e2", "source": "L602", "target": "L603", "amount": "$28,200", "time": "09:28 AM" },
+          { "id": "c6_e3", "source": "L603", "target": "L604", "amount": "$27,950", "time": "09:44 AM" },
+          { "id": "c6_e4", "source": "L605", "target": "L606", "amount": "$340", "time": "Yesterday" },
+          { "id": "c6_e5", "source": "L606", "target": "L607", "amount": "$180", "time": "2d ago" },
+          { "id": "c6_e6", "source": "L607", "target": "L608", "amount": "$210", "time": "3d ago" },
+          { "id": "c6_e7", "source": "L609", "target": "L610", "amount": "$450", "time": "Yesterday" },
+          { "id": "c6_e8", "source": "L611", "target": "L612", "amount": "$95", "time": "4d ago" },
+          { "id": "c6_e9", "source": "L613", "target": "L614", "amount": "$620", "time": "Yesterday" }
+        ]
+      }
+    },
+    {
+      "id": "case-07",
+      "caseNumber": 7,
+      "title": "Case 7: Micro-Smurfing Dispersal Network",
+      "modelCorrect": false,
+      "isDeliberateError": "false_negative",
+      "groundTruth": {
+        "isFraudRing": true,
+        "ringAccounts": ["S701", "S702", "S703", "S704", "S705"],
+        "summary": "STEALTH FRAUD RING (Model False Negative): Structured micro-smurfing ring. Transfers are deliberately kept under $950 and staggered across 4 days to evade automated threshold detection."
+      },
+      "modelVerdict": {
+        "flag": "Looks Normal",
+        "riskScore": 14,
+        "riskLevel": "low",
+        "explanation": "Transaction amounts are well beneath regulatory threshold limits; flow volume matches typical peer payments.",
+        "highlightedNodes": ["S701", "S705"],
+        "highlightedEdges": ["c7_e1"],
+        "uncertainty": "Uncertain / Borderline (Model Confidence: 51%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "S701", "label": "Smurf-701", "balance": "$120", "age": "32d", "txCount": 5 },
+          { "id": "S702", "label": "Smurf-702", "balance": "$95", "age": "28d", "txCount": 4 },
+          { "id": "S703", "label": "Smurf-703", "balance": "$140", "age": "35d", "txCount": 6 },
+          { "id": "S704", "label": "Smurf-704", "balance": "$85", "age": "26d", "txCount": 4 },
+          { "id": "S705", "label": "Aggregation-Hub", "balance": "$18,200", "age": "45d", "txCount": 22 },
+          { "id": "S706", "label": "User-706", "balance": "$2,400", "age": "380d", "txCount": 41 },
+          { "id": "S707", "label": "User-707", "balance": "$1,850", "age": "420d", "txCount": 36 },
+          { "id": "S708", "label": "User-708", "balance": "$3,100", "age": "590d", "txCount": 68 },
+          { "id": "S709", "label": "User-709", "balance": "$920", "age": "170d", "txCount": 15 },
+          { "id": "S710", "label": "User-710", "balance": "$4,200", "age": "710d", "txCount": 89 },
+          { "id": "S711", "label": "User-711", "balance": "$1,350", "age": "240d", "txCount": 23 },
+          { "id": "S712", "label": "User-712", "balance": "$2,700", "age": "460d", "txCount": 52 },
+          { "id": "S713", "label": "User-713", "balance": "$840", "age": "130d", "txCount": 12 },
+          { "id": "S714", "label": "User-714", "balance": "$3,600", "age": "540d", "txCount": 64 },
+          { "id": "S715", "label": "User-715", "balance": "$1,150", "age": "210d", "txCount": 19 }
+        ],
+        "edges": [
+          { "id": "c7_e1", "source": "S701", "target": "S705", "amount": "$920", "time": "4d ago" },
+          { "id": "c7_e2", "source": "S701", "target": "S705", "amount": "$940", "time": "2d ago" },
+          { "id": "c7_e3", "source": "S702", "target": "S705", "amount": "$910", "time": "3d ago" },
+          { "id": "c7_e4", "source": "S703", "target": "S705", "amount": "$950", "time": "Yesterday" },
+          { "id": "c7_e5", "source": "S704", "target": "S705", "amount": "$930", "time": "Yesterday" },
+          { "id": "c7_e6", "source": "S706", "target": "S707", "amount": "$140", "time": "2d ago" },
+          { "id": "c7_e7", "source": "S707", "target": "S708", "amount": "$280", "time": "Yesterday" },
+          { "id": "c7_e8", "source": "S709", "target": "S710", "amount": "$95", "time": "3d ago" },
+          { "id": "c7_e9", "source": "S711", "target": "S712", "amount": "$350", "time": "Yesterday" },
+          { "id": "c7_e10", "source": "S713", "target": "S714", "amount": "$210", "time": "4d ago" },
+          { "id": "c7_e11", "source": "S714", "target": "S715", "amount": "$75", "time": "Yesterday" }
+        ]
+      }
+    },
+    {
+      "id": "case-08",
+      "caseNumber": 8,
+      "title": "Case 8: E-Commerce Merchant Return Pool",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": false,
+        "ringAccounts": [],
+        "summary": "Legitimate verified online merchant processing product return refunds back to multiple customer buyer cards."
+      },
+      "modelVerdict": {
+        "flag": "Looks Normal",
+        "riskScore": 22,
+        "riskLevel": "low",
+        "explanation": "Outward refund transfers correlate with inbound merchant sales volume on an established corporate profile.",
+        "highlightedNodes": ["R801", "R802", "R803"],
+        "highlightedEdges": ["c8_e1", "c8_e2"],
+        "uncertainty": "High confidence (92%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "R801", "label": "Shopify-Store", "balance": "$54,000", "age": "940d", "txCount": 1420 },
+          { "id": "R802", "label": "Buyer-1", "balance": "$1,400", "age": "410d", "txCount": 38 },
+          { "id": "R803", "label": "Buyer-2", "balance": "$2,200", "age": "320d", "txCount": 45 },
+          { "id": "R804", "label": "Buyer-3", "balance": "$850", "age": "190d", "txCount": 16 },
+          { "id": "R805", "label": "Buyer-4", "balance": "$3,100", "age": "580d", "txCount": 72 },
+          { "id": "R806", "label": "Supplier-Co", "balance": "$38,000", "age": "1100d", "txCount": 610 },
+          { "id": "R807", "label": "User-807", "balance": "$1,900", "age": "280d", "txCount": 29 },
+          { "id": "R808", "label": "User-808", "balance": "$2,600", "age": "390d", "txCount": 44 },
+          { "id": "R809", "label": "User-809", "balance": "$940", "age": "160d", "txCount": 14 },
+          { "id": "R810", "label": "User-810", "balance": "$4,100", "age": "640d", "txCount": 81 },
+          { "id": "R811", "label": "User-811", "balance": "$1,250", "age": "220d", "txCount": 19 },
+          { "id": "R812", "label": "User-812", "balance": "$3,500", "age": "490d", "txCount": 58 }
+        ],
+        "edges": [
+          { "id": "c8_e1", "source": "R801", "target": "R802", "amount": "$115", "time": "Yesterday" },
+          { "id": "c8_e2", "source": "R801", "target": "R803", "amount": "$89", "time": "Yesterday" },
+          { "id": "c8_e3", "source": "R801", "target": "R804", "amount": "$145", "time": "2d ago" },
+          { "id": "c8_e4", "source": "R801", "target": "R805", "amount": "$210", "time": "3d ago" },
+          { "id": "c8_e5", "source": "R801", "target": "R806", "amount": "$12,400", "time": "Weekly" },
+          { "id": "c8_e6", "source": "R807", "target": "R808", "amount": "$240", "time": "Yesterday" },
+          { "id": "c8_e7", "source": "R809", "target": "R810", "amount": "$180", "time": "3d ago" },
+          { "id": "c8_e8", "source": "R811", "target": "R812", "amount": "$310", "time": "Yesterday" }
+        ]
+      }
+    },
+    {
+      "id": "case-09",
+      "caseNumber": 9,
+      "title": "Case 9: Staggered Relay Mule Chain",
+      "modelCorrect": false,
+      "isDeliberateError": "false_negative",
+      "groundTruth": {
+        "isFraudRing": true,
+        "ringAccounts": ["X901", "X902", "X903", "X904"],
+        "summary": "STEALTH FRAUD RING (Model False Negative): Multi-hop relay ring. Siphoned fraud proceeds pass through X901 -> X902 -> X903 -> X904, disguised by irregular intervals and split amounts."
+      },
+      "modelVerdict": {
+        "flag": "Looks Normal",
+        "riskScore": 19,
+        "riskLevel": "low",
+        "explanation": "No sudden volume surges detected; temporal gaps between transfers match normal consumer habits.",
+        "highlightedNodes": ["X901", "X902"],
+        "highlightedEdges": ["c9_e1"],
+        "uncertainty": "Borderline Uncertainty (Confidence: 53%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "X901", "label": "Origin-Mule", "balance": "$85", "age": "45d", "txCount": 5 },
+          { "id": "X902", "label": "Relay-1", "balance": "$110", "age": "39d", "txCount": 4 },
+          { "id": "X903", "label": "Relay-2", "balance": "$90", "age": "42d", "txCount": 6 },
+          { "id": "X904", "label": "Offramp-Node", "balance": "$22,400", "age": "51d", "txCount": 9 },
+          { "id": "X905", "label": "User-905", "balance": "$3,400", "age": "420d", "txCount": 54 },
+          { "id": "X906", "label": "User-906", "balance": "$1,850", "age": "310d", "txCount": 38 },
+          { "id": "X907", "label": "User-907", "balance": "$2,900", "age": "580d", "txCount": 71 },
+          { "id": "X908", "label": "User-908", "balance": "$890", "age": "180d", "txCount": 16 },
+          { "id": "X909", "label": "User-909", "balance": "$4,200", "age": "690d", "txCount": 84 },
+          { "id": "X910", "label": "User-910", "balance": "$1,450", "age": "270d", "txCount": 26 },
+          { "id": "X911", "label": "User-911", "balance": "$2,100", "age": "350d", "txCount": 39 },
+          { "id": "X912", "label": "User-912", "balance": "$980", "age": "160d", "txCount": 13 },
+          { "id": "X913", "label": "User-913", "balance": "$3,500", "age": "510d", "txCount": 62 }
+        ],
+        "edges": [
+          { "id": "c9_e1", "source": "X901", "target": "X902", "amount": "$7,400", "time": "3d ago 14:10" },
+          { "id": "c9_e2", "source": "X902", "target": "X903", "amount": "$7,250", "time": "2d ago 18:30" },
+          { "id": "c9_e3", "source": "X903", "target": "X904", "amount": "$7,100", "time": "Yesterday 11:20" },
+          { "id": "c9_e4", "source": "X905", "target": "X906", "amount": "$240", "time": "Yesterday" },
+          { "id": "c9_e5", "source": "X906", "target": "X907", "amount": "$190", "time": "3d ago" },
+          { "id": "c9_e6", "source": "X908", "target": "X909", "amount": "$450", "time": "Yesterday" },
+          { "id": "c9_e7", "source": "X910", "target": "X911", "amount": "$120", "time": "4d ago" },
+          { "id": "c9_e8", "source": "X912", "target": "X913", "amount": "$380", "time": "Yesterday" }
+        ]
+      }
+    },
+    {
+      "id": "case-10",
+      "caseNumber": 10,
+      "title": "Case 10: Syndicated Crypto Funnel Ring",
+      "modelCorrect": true,
+      "groundTruth": {
+        "isFraudRing": true,
+        "ringAccounts": ["Z101", "Z102", "Z103", "Z104", "Z105"],
+        "summary": "High-risk confirmed mule syndicate: 4 synthetic identities transfer large lump sums to Z105 within 40 minutes for instant P2P crypto liquidation."
+      },
+      "modelVerdict": {
+        "flag": "Suspicious Ring Detected",
+        "riskScore": 98,
+        "riskLevel": "high",
+        "explanation": "High graph entropy collapse: synchronized deposit influx into hub Z105 followed by immediate off-network sweep.",
+        "highlightedNodes": ["Z101", "Z102", "Z103", "Z104", "Z105"],
+        "highlightedEdges": ["c10_e1", "c10_e2", "c10_e3", "c10_e4"],
+        "uncertainty": "High confidence (98%)"
+      },
+      "graph": {
+        "nodes": [
+          { "id": "Z101", "label": "Synth-101", "balance": "$80", "age": "9d", "txCount": 3 },
+          { "id": "Z102", "label": "Synth-102", "balance": "$110", "age": "12d", "txCount": 4 },
+          { "id": "Z103", "label": "Synth-103", "balance": "$65", "age": "8d", "txCount": 3 },
+          { "id": "Z104", "label": "Synth-104", "balance": "$95", "age": "14d", "txCount": 4 },
+          { "id": "Z105", "label": "Liquidation-Hub", "balance": "$39,500", "age": "19d", "txCount": 11 },
+          { "id": "Z106", "label": "User-106", "balance": "$2,400", "age": "410d", "txCount": 39 },
+          { "id": "Z107", "label": "User-107", "balance": "$1,850", "age": "320d", "txCount": 28 },
+          { "id": "Z108", "label": "User-108", "balance": "$3,200", "age": "590d", "txCount": 65 },
+          { "id": "Z109", "label": "User-109", "balance": "$920", "age": "170d", "txCount": 15 },
+          { "id": "Z110", "label": "User-110", "balance": "$4,100", "age": "720d", "txCount": 94 },
+          { "id": "Z111", "label": "User-111", "balance": "$1,350", "age": "240d", "txCount": 21 },
+          { "id": "Z112", "label": "User-112", "balance": "$2,800", "age": "480d", "txCount": 51 }
+        ],
+        "edges": [
+          { "id": "c10_e1", "source": "Z101", "target": "Z105", "amount": "$9,800", "time": "03:10 PM" },
+          { "id": "c10_e2", "source": "Z102", "target": "Z105", "amount": "$9,900", "time": "03:22 PM" },
+          { "id": "c10_e3", "source": "Z103", "target": "Z105", "amount": "$9,750", "time": "03:35 PM" },
+          { "id": "c10_e4", "source": "Z104", "target": "Z105", "amount": "$9,850", "time": "03:48 PM" },
+          { "id": "c10_e5", "source": "Z106", "target": "Z107", "amount": "$190", "time": "Yesterday" },
+          { "id": "c10_e6", "source": "Z107", "target": "Z108", "amount": "$340", "time": "2d ago" },
+          { "id": "c10_e7", "source": "Z109", "target": "Z110", "amount": "$85", "time": "3d ago" },
+          { "id": "c10_e8", "source": "Z111", "target": "Z112", "amount": "$260", "time": "Yesterday" }
+        ]
+      }
+    }
+  ]
+}

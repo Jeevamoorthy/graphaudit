@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "studyTitle": "GraphAudit Pilot Study (N=48)",
+    "sampleSize": 48,
+    "conditions": {
+      "A": { "name": "Condition A (Flag Only)", "participants": 16 },
+      "B": { "name": "Condition B (Flag + Explanation)", "participants": 17 },
+      "C": { "name": "Condition C (Flag + Expl + Uncertainty)", "participants": 15 }
+    },
+    "note": "Pilot cohort collected across 48 university and peer reviewers. Demonstrates significant automation bias / over-reliance when explanations are presented."
+  },
+  "metrics": {
+    "accuracy": [
+      { "condition": "A (Flag Only)", "accuracy": 68.8, "ciLow": 62.4, "ciHigh": 75.2 },
+      { "condition": "B (Flag + Expl)", "accuracy": 65.3, "ciLow": 58.7, "ciHigh": 71.9 },
+      { "condition": "C (Flag + Expl + Unc)", "accuracy": 74.0, "ciLow": 67.8, "ciHigh": 80.2 }
+    ],
+    "relianceOnErrors": [
+      {
+        "category": "Model Correct (7 Cases)",
+        "conditionA": 78.6,
+        "conditionB": 89.1,
+        "conditionC": 86.7
+      },
+      {
+        "category": "Model Wrong (3 Cases - Over-reliance)",
+        "conditionA": 37.5,
+        "conditionB": 68.6,
+        "conditionC": 44.4
+      }
+    ],
+    "averageTimeSeconds": [
+      { "condition": "A (Flag Only)", "seconds": 34.2, "ciLow": 30.1, "ciHigh": 38.3 },
+      { "condition": "B (Flag + Expl)", "seconds": 23.8, "ciLow": 20.4, "ciHigh": 27.2 },
+      { "condition": "C (Flag + Expl + Unc)", "seconds": 28.5, "ciLow": 24.9, "ciHigh": 32.1 }
+    ],
+    "confidenceRating": [
+      { "condition": "A (Flag Only)", "avgRating": 3.12, "ciLow": 2.9, "ciHigh": 3.34 },
+      { "condition": "B (Flag + Expl)", "avgRating": 4.18, "ciLow": 3.98, "ciHigh": 4.38 },
+      { "condition": "C (Flag + Expl + Unc)", "avgRating": 3.75, "ciLow": 3.52, "ciHigh": 3.98 }
+    ],
+    "errorCaseBreakdown": [
+      {
+        "case": "Case 4 (False Positive - Festival Pool)",
+        "agreementA": "31% agreed with AI (wrong)",
+        "agreementB": "65% agreed with AI (wrong)",
+        "agreementC": "40% agreed with AI (wrong)"
+      },
+      {
+        "case": "Case 7 (False Negative - Micro-Smurfing)",
+        "agreementA": "44% agreed with AI (wrong)",
+        "agreementB": "71% agreed with AI (wrong)",
+        "agreementC": "47% agreed with AI (wrong)"
+      },
+      {
+        "case": "Case 9 (False Negative - Relay Mule Chain)",
+        "agreementA": "38% agreed with AI (wrong)",
+        "agreementB": "70% agreed with AI (wrong)",
+        "agreementC": "46% agreed with AI (wrong)"
+      }
+    ]
+  }
+}
