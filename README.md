@@ -1,10 +1,17 @@
 # GraphAudit 🔍
 > **"Does showing why help? A study of explanations and over-reliance in AI fraud review."**
 
-[![Vercel Deployment](https://img.shields.io/badge/Deployed-Vercel-black?style=flat&logo=vercel)](https://vercel.com)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Jeevamoorthy/graphaudit)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Jeevamoorthy%2Fgraphaudit-181717?style=flat&logo=github)](https://github.com/Jeevamoorthy/graphaudit)
 [![React](https://img.shields.io/badge/Frontend-React%2018%20%2B%20Vite-61DAFB?style=flat&logo=react)](https://react.dev)
 [![Cytoscape](https://img.shields.io/badge/Graph-Cytoscape.js-E65100?style=flat)](https://js.cytoscape.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+### 🌐 Instant 1-Click Launch on Vercel
+You can deploy your own instance of GraphAudit in seconds:
+👉 **[Click Here to Deploy on Vercel](https://vercel.com/new/clone?repository-url=https://github.com/Jeevamoorthy/graphaudit)**
 
 ---
 
